@@ -15,7 +15,7 @@
  */
 
 output "bigquery_dataset" {
-  value       = google_bigquery_dataset.main
+  value       = local.effective_dataset
   description = "Bigquery dataset resource."
 }
 
@@ -35,7 +35,7 @@ output "bigquery_external_tables" {
 }
 
 output "project" {
-  value       = google_bigquery_dataset.main.project
+  value       = local.effective_dataset.project
   description = "Project where the dataset and tables are created"
 }
 

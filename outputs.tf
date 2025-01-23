@@ -15,7 +15,7 @@
  */
 
 output "bigquery_dataset" {
-  value       = local.effective_dataset_obj.main
+  value       = local.effective_dataset_id
   description = "Bigquery dataset resource."
 }
 

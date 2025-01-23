@@ -27,7 +27,7 @@ locals {
     "roles/bigquery.dataViewer" : "READER"
   }
 
-  effective_dataset_id = var.create_dataset ? google_bigquery_dataset.main[0].dataset_id : data.google_bigquery_dataset.existing[0].dataset_id
+  effective_dataset = var.create_dataset ? google_bigquery_dataset.main[0] : data.google_bigquery_dataset.existing[0]
 }
 
 resource "google_bigquery_dataset" "main" {
@@ -76,7 +76,7 @@ data "google_bigquery_dataset" "existing" {
 
 resource "google_bigquery_table" "main" {
   for_each                 = local.tables
-  dataset_id               = local.effective_dataset_id
+  dataset_id               = local.effective_dataset.dataset_id
   friendly_name            = each.value["table_name"] != null ? each.value["table_name"] : each.key
   table_id                 = each.key
   description              = each.value["description"]
@@ -118,7 +118,7 @@ resource "google_bigquery_table" "main" {
 
 resource "google_bigquery_table" "view" {
   for_each            = local.views
-  dataset_id          = local.effective_dataset_id
+  dataset_id          = local.effective_dataset.dataset_id
   friendly_name       = each.key
   table_id            = each.key
   description         = each.value["description"]
@@ -140,7 +140,7 @@ resource "google_bigquery_table" "view" {
 
 resource "google_bigquery_table" "materialized_view" {
   for_each            = local.materialized_views
-  dataset_id          = local.effective_dataset_id
+  dataset_id          = local.effective_dataset.dataset_id
   friendly_name       = each.key
   table_id            = each.key
   description         = each.value["description"]
@@ -188,7 +188,7 @@ resource "google_bigquery_table" "materialized_view" {
 
 resource "google_bigquery_table" "external_table" {
   for_each            = local.external_tables
-  dataset_id          = local.effective_dataset_id
+  dataset_id          = local.effective_dataset.dataset_id
   friendly_name       = each.key
   table_id            = each.key
   description         = each.value["description"]
@@ -245,7 +245,7 @@ resource "google_bigquery_table" "external_table" {
 
 resource "google_bigquery_routine" "routine" {
   for_each        = local.routines
-  dataset_id      = local.effective_dataset_id
+  dataset_id      = local.effective_dataset.dataset_id
   routine_id      = each.key
   description     = each.value["description"]
   routine_type    = each.value["routine_type"]

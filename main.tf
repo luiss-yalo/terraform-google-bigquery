@@ -245,7 +245,7 @@ resource "google_bigquery_table" "external_table" {
 
 resource "google_bigquery_routine" "routine" {
   for_each        = local.routines
-  dataset_id      = google_bigquery_dataset.main.dataset_id
+  dataset_id      = local.effective_dataset_id
   routine_id      = each.key
   description     = each.value["description"]
   routine_type    = each.value["routine_type"]
